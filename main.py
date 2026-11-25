@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One-Liner Marathon entry.
+"""One-Liner Marathon entry (rev).
 
 Writes one original funny line (<=280 chars) to /output/entry.txt,
 deterministically: same bytes on every run.
@@ -8,7 +8,7 @@ import hashlib
 import os
 import sys
 
-LINE = "I told the GPS I knew a shortcut. It has been silent for forty minutes, out of respect."
+LINE = "I joined a book club for the wine. They kicked me out for reading the book."
 
 OUTPUT_PATH = "/output/entry.txt"
 
@@ -32,6 +32,17 @@ def check_single_line(line):
         raise ValueError("entry must be a single line")
 
 
+def check_no_padding(line):
+    """Gate 3: no leading or trailing whitespace.
+
+    Padding would survive the length gate but waste the judge's first
+    and last impression on blank space; the entry must start and end
+    on a word.
+    """
+    if line != line.strip():
+        raise ValueError("entry must not start or end with whitespace")
+
+
 def validate(line):
     """Check the line against the sealed scorer's gate, without asserts.
 
@@ -40,6 +51,7 @@ def validate(line):
     """
     check_length(line)
     check_single_line(line)
+    check_no_padding(line)
 
 
 def ensure_output_dir(path):
